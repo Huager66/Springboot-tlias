@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.mapper.StuMapper">
+    <insert id="save">
+        INSERT INTO student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <!-- 必填字段直接写死 -->
+            name, no, gender, phone, degree, clazz_id,update_time,
+
+            <!-- 非必填字段进行动态判断 -->
+            <if test="idCard != null and idCard != ''">id_card,</if>
+            <if test="isCollege != null">is_college,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="graduationDate != null ">graduation_date,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <!-- 必填字段直接写死 -->
+            #{name}, #{no}, #{gender}, #{phone}, #{degree}, #{clazzId},#{updateTime},
+
+            <!-- 非必填字段进行动态判断 -->
+            <if test="idCard != null and idCard != ''">#{idCard},</if>
+            <if test="isCollege != null">#{isCollege},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="graduationDate != null">#{graduationDate},</if>
+        </trim>
+
+
+    </insert>
+    <update id="update">
+        UPDATE student
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="no != null and no != ''">
+                no = #{no},
+            </if>
+            <if test="gender != null and gender != ''">
+                gender = #{gender},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="degree != null and degree != ''">
+                degree = #{degree},
+            </if>
+            <if test="clazzId != null">
+                clazz_id = #{clazzId},
+            </if>
+            <if test="idCard != null and idCard != ''">
+                id_card = #{idCard},
+            </if>
+            <if test="isCollege != null">
+                is_college = #{isCollege},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="graduationDate != null">
+                graduation_date = #{graduationDate},
+            </if>
+            <if test="violationCount != null">
+                violation_count = #{violationCount},
+            </if>
+            <if test="violationScore != null">
+                violation_score = #{violationScore},
+            </if>
+            update_time = #{updateTime}
+        </set>
+        WHERE id = #{id}
+    </update>
+    <delete id="deleteByids">
+        DELETE FROM student
+        WHERE id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="list" resultType="org.example.Student">
+        SELECT
+        s.*,
+        c.name AS clazzName
+        FROM student s
+        LEFT JOIN clazz c ON s.clazz_id = c.id
+        <where>
+            <!-- 姓名：模糊查询 -->
+            <if test="name != null and name != ''">
+                AND s.name LIKE CONCAT('%', #{name}, '%')
+            </if>
+            <!-- 最高学历：精确查询 -->
+            <if test="degree != null and degree != ''">
+                AND s.degree = #{degree}
+            </if>
+            <!-- 所属班级：精确查询 -->
+            <if test="clazzId != null">
+                AND s.clazz_id = #{clazzId}
+            </if>
+        </where>
+    </select>
+    <select id="countStudentDegreeData" resultType="java.util.Map">
+        SELECT
+        CASE degree
+        WHEN 1 THEN '初中'
+        WHEN 2 THEN '高中'
+        WHEN 3 THEN '大专'
+        WHEN 4 THEN '本科'
+        WHEN 5 THEN '硕士'
+        WHEN 6 THEN '博士'
+        ELSE CONCAT('未知-', degree)
+        END AS name,
+        COUNT(*) AS value
+        FROM student
+        GROUP BY degree
+        ORDER BY degree ASC
+    </select>
+    <select id="countStudentCountData" resultType="java.util.Map">
+        SELECT
+        c.name AS name,
+        COUNT(s.id) AS value
+        FROM clazz c
+        LEFT JOIN student s ON c.id = s.clazz_id
+        GROUP BY c.id, c.name
+        ORDER BY c.id ASC
+    </select>
+</mapper>
