@@ -1,4 +1,4 @@
-package com.itheima.utils;
+package org.example;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -6,9 +6,11 @@ import org.example.LoginInfo;
 import org.example.Result;
 import org.example.service.EmpService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @Slf4j
 @RestController
