@@ -6,6 +6,7 @@ import org.example.service.ClazzService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -24,19 +25,20 @@ public class ClazzController {
     @DeleteMapping ("/{id}")
     public Result delete(@PathVariable Integer id) {
         log.info("根据ID删除班级信息: {}", id);
-        clazzService.delete(id);
+        clazzService.removeById(id);
         return Result.success();
     }
     @PostMapping
     public Result save(@RequestBody Clazz clazz) {
         log.info("新增班级: {}", clazz);
+        clazz.setUpdateTime(LocalDateTime.now());
         clazzService.save(clazz);
         return Result.success();
     }
     @GetMapping("/{id}")
     public Result getInfo(@PathVariable Integer id) {
         log.info("根据ID查询员工信息: {}", id);
-        Clazz clazz = clazzService.getInfo(id);
+        Clazz clazz = clazzService.getById(id);
         return Result.success(clazz);
     }
     @PutMapping

@@ -1,5 +1,6 @@
 package org.example.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 import org.example.StuQueryParam;
 import org.example.Student;
@@ -8,21 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 @Mapper
-public interface StuMapper {
+public interface StuMapper extends BaseMapper<Student> {
     List<Student> list(StuQueryParam stuQueryParam);
-
-
-    void save(Student student);
-
-
-
-    void deleteByids(List<Integer> ids);
-
-    @Select("SELECT * FROM student WHERE id = #{id}")
-    Student getById(Integer id);
-
-
-    void update(Student student);
 
     @Update("UPDATE student SET violation_score = #{score} WHERE id = #{id}")
     void update1(Integer id, Integer score);

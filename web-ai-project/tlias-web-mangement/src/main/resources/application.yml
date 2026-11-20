@@ -13,7 +13,7 @@ spring:
       max-request-size: 100MB
 
 #Mybatis的相关配置
-mybatis:
+mybatis-plus:
   mapper-locations: classpath:org.example.mapper/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -28,4 +28,3 @@ aliyun:
     endpoint: https://oss-cn-beijing.aliyuncs.com
     bucket-name: java-ai-web6
     region: cn-beijing
-

@@ -1,5 +1,7 @@
 package org.example.service.impl;
 
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.example.*;
@@ -12,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class ClazzServiceImpl implements ClazzService {
+public class ClazzServiceImpl extends ServiceImpl<ClazzMapper, Clazz> implements ClazzService {
     @Autowired
     private ClazzMapper clazzMapper;
     @Override
@@ -22,34 +24,18 @@ public class ClazzServiceImpl implements ClazzService {
         Page<Clazz> p = (Page<Clazz>) clazzList;
         return new PageResult<Clazz>(p.getTotal(), p.getResult());
     }
-
-    @Override
-    public void delete(Integer id) {
-        clazzMapper.delete(id);
-    }
-
-    @Override
-    public void save(Clazz clazz) {
-        clazz.setUpdateTime(LocalDateTime.now());
-        clazzMapper.insert(clazz);
-    }
-
-    @Override
-    public Clazz getInfo(Integer id) {
-        return clazzMapper.getById(id);
-    }
-
     @Override
     public void update(Clazz clazz) {
         clazz.setUpdateTime(LocalDateTime.now());
-        clazzMapper.update(clazz);
+        lambdaUpdate()
+                .set(Clazz::getUpdateTime, LocalDateTime.now())
+                .set(clazz.getName() != null && !clazz.getName().isEmpty(), Clazz::getName, clazz.getName())
+                .set(clazz.getRoom() != null && !clazz.getRoom().isEmpty(), Clazz::getRoom, clazz.getRoom())
+                .set(clazz.getBeginDate() != null, Clazz::getBeginDate, clazz.getBeginDate())
+                .set(clazz.getEndDate() != null, Clazz::getEndDate, clazz.getEndDate())
+                .set(clazz.getMasterId() != null, Clazz::getMasterId, clazz.getMasterId())
+                .set(clazz.getSubject() != null, Clazz::getSubject, clazz.getSubject())
+                .eq(Clazz::getId, clazz.getId())
+                .update();
     }
-
-    @Override
-    public List<Clazz> list() {
-        return clazzMapper.list1();
-
-    }
-
-
 }

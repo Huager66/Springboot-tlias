@@ -6,6 +6,7 @@ import org.example.service.StuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -25,19 +26,20 @@ public class StuController {
     @PostMapping
     public Result save(@RequestBody Student student) {
         log.info("新增学生: {}", student);
+        student.setUpdateTime(LocalDateTime.now());
         stuService.save(student);
         return Result.success();
     }
     @DeleteMapping("/{ids}")
     public Result delete(@PathVariable List<Integer> ids) {
         log.info("删除学生: {}", ids);
-        stuService.delete(ids);
+        stuService.removeBatchByIds(ids);
         return Result.success();
     }
     @GetMapping("/{id}")
     public Result getInfo(@PathVariable Integer id) {
         log.info("根据ID查询学生信息: {}", id);
-        Student student = stuService.getInfo(id);
+        Student student = stuService.getById(id);
         return Result.success(student);
     }
     @PutMapping

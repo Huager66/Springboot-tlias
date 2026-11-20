@@ -1,5 +1,9 @@
 package org.example;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +15,9 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("student")
 public class Student {
+    @TableId(type = IdType.AUTO)
     private Integer id; //ID
     private String name; //姓名
     private String no; //学号
@@ -29,5 +35,6 @@ public class Student {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime; //修改时间
 
+    @TableField(exist = false)
     private String clazzName;//班级名称
 }

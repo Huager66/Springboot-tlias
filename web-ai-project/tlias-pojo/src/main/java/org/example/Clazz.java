@@ -1,5 +1,9 @@
 package org.example;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +15,9 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("clazz")
 public class Clazz {
+    @TableId(type = IdType.AUTO)
     private Integer id; //ID
     private String name; //班级名称
     private String room; //班级教室
@@ -22,6 +28,8 @@ public class Clazz {
     private LocalDateTime createTime; //创建时间
     private LocalDateTime updateTime; //修改时间
 
+    @TableField(exist = false)
     private String masterName; //班主任姓名
+    @TableField(exist = false)
     private String status; //班级状态 - 未开班 , 在读 , 已结课
 }
